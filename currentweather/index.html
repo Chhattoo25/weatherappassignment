@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weatherapp</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: "Numito",sans-serif;
+            background:radial-gradient(circle,
+            rgb(77, 89, 192) 0%,
+            rgb(34, 150, 53)50%)
+        }
+        #city{
+            text-align: center;
+            margin:50px 0px;
+            margin-left: 200px;
+        }
+        input[type="text"]{
+            height:40px;
+            width:300px;
+            border-radius: 38px;
+            background-color: #e7e7e7;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 20px;
+            border:none;
+         
+            
+
+        }
+        button{
+            height:40px;
+            width:150px;
+            border-radius: 8px;
+            background-color: #e7e7e7;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 20px;
+            border:none;
+            margin-left: 10px;
+        }
+
+
+
+
+        #container{
+            padding:10px 10px;
+            color: blueviolet;
+            background-color: aqua;
+            /* margin-right:60%; */
+            
+            /* justify-content: left; */
+            /* text-align:center; */
+            line-height: 40px;
+            height:auto;
+            width:300px;
+            border-radius: 10px;
+            box-shadow: 5px 4px 4px ;
+            /* height:300px */
+        }
+        #mapdiv{
+            /* margin-left:45%; */
+            /* display: flex; */
+            border-radius: 10px;
+            box-shadow: 5px 4px 10px greenyellow;
+            
+            justify-content: right;
+        }
+    </style>
+</head>
+
+<body>
+<div> 
+    <input type="text" id="city" placeholder="enter city name">
+    <button onclick="getweather()">Get Weather</button>
+</div>
+  
+    
+    <div style="display: flex; justify-content: space-around;">
+    <div id="container">
+   
+    </div>
+    <div id="mapdiv"></div>
+    </div>
+</body>
+
+</html>
+<script>
+
+    // getweather()
+    // let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=4db79c80a0011b0ac1f770080f67bb2d&units=metric`
+    // 2dbda34a167250873b67ae4dceebbef5
+    async function getweather() {
+
+        let city = document.getElementById("city").value
+        try {
+            let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=4db79c80a0011b0ac1f770080f67bb2d&units=metric`)
+            let data = await res.json()
+            console.log(data)
+            appenddata(data)
+        }
+        catch (err) {
+            console.log(err)
+
+        }
+    }
+    function appenddata(data) {
+        container.innerHTML = null
+        mapdiv.innerHTML=null
+        let name = document.createElement("h2")
+        name.innerText = `○City➡${data.name}`
+
+        let temp = document.createElement("h3")
+        temp.innerText = `☁ Temperature➼${data.main.temp} ℃`
+
+        let pressure = document.createElement("h3")
+        pressure.innerText = `Pressure➼${data.main.pressure}`
+
+        let humidity = document.createElement("h3")
+        humidity.innerText = `☔ Humidity➼${data.main.humidity}`
+
+        // minimum maximum temp
+        let minimum = document.createElement("h3")
+        minimum.innerText= `Min.Temp.➼:${data.main.temp_min} ℃`
+      
+        let maximum = document.createElement("h3")
+        maximum.innerText= `Max.Temp.➼:${data.main.temp_max}℃`
+        
+        let sunrise = document.createElement("h3")
+        sunrise.innerText= `🌅 Sunrise➼${data.sys.sunrise}`
+
+        let sunset = document.createElement("h3")
+        sunset.innerText=` ⛅ Sunset➼${data.sys.sunset}`
+
+        let iframe = document.createElement("iframe")
+        iframe.src = `https://maps.google.com/maps?q=${data.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+        iframe.height = "400px"
+        iframe.width = "500px"
+        container.append(name, temp, pressure,humidity,minimum,maximum,sunrise,sunset)
+        let imagediv = document.getElementById("mapdiv")
+   mapdiv.append(iframe)
+    }
+</script> 
