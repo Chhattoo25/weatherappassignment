@@ -6,4 +6,5 @@
 
 
 #About App
--
+-About
+This is the weather app in which you can search any city name and get relative city weather along with map and also get seven days weather
